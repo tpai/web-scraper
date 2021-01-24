@@ -3,8 +3,8 @@ require("dotenv").config();
 const isReachable = require("is-reachable");
 const puppeteer = require("puppeteer");
 
-const { NODE_ENV, PAGE_URL, PAGE_SELECTOR } = process.env;
-const BROWSER_URL = "http://0.0.0.0:9222";
+const { NODE_ENV, PAGE_URL, PAGE_SELECTOR, CHROME_HOST } = process.env;
+const BROWSER_URL = `http://${CHROME_HOST || "0.0.0.0"}:9222`;
 
 const checkAlive = async (url) => {
   const isReached = await isReachable(url);

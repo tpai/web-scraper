@@ -3,6 +3,7 @@ require("dotenv").config();
 const { SMTPClient } = require("emailjs");
 
 const {
+  MAIL_HOST,
   MAIL_SUBJECT,
   MAIL_SENDER_NAME,
   GMAIL_USER,
@@ -10,7 +11,7 @@ const {
 
 const sendEmail = ({ text, html }) => {
   const client = new SMTPClient({
-    host: '0.0.0.0',
+    host: MAIL_HOST || '0.0.0.0',
   });
   const message = {
     from: `${MAIL_SENDER_NAME} <${GMAIL_USER}>`,
