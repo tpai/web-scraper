@@ -1,10 +1,10 @@
 require("dotenv").config();
 
+const dns = require("dns").promises;
 const isReachable = require("is-reachable");
 const puppeteer = require("puppeteer");
 
 const { NODE_ENV, PAGE_URL, PAGE_SELECTOR, CHROME_HOST } = process.env;
-const BROWSER_URL = `http://${CHROME_HOST || "0.0.0.0"}:9222`;
 
 const checkAlive = async (url) => {
   const isReached = await isReachable(url);
@@ -21,14 +21,25 @@ const app = async () => {
     if (NODE_ENV === "development") {
       browser = await puppeteer.launch();
     } else {
+      console.log(`CHROME_HOST=${CHROME_HOST}`);
+
+      const { address } = await dns.lookup(CHROME_HOST || "localhost", {
+        family: 4,
+        hints: dns.ADDRCONFIG,
+      });
+
+      console.log(`IP_ADDRESS=${address}`);
       console.log("Check browser health...");
-      const isAlive = await checkAlive(BROWSER_URL);
+      const isAlive = await checkAlive(
+        `http://${address}:9222`
+      );
       if (!isAlive) {
         console.log("Browser is dead!");
         return;
       }
+
       browser = await puppeteer.connect({
-        browserURL: BROWSER_URL,
+        browserURL: `http://${address}:9222`,
       });
     }
     console.log(await browser.version());
@@ -73,7 +84,9 @@ const port = 3000;
 server.get("/", async (_, res) => {
   try {
     const data = await app();
+    console.log('Sending email...');
     const result = await sendEmail(data);
+    console.log('Sent');
     res.send(result);
   } catch (e) {
     res.sendStatus(400);

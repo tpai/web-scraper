@@ -5,7 +5,8 @@
   "author": "Tony Pai <tony77794@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=development node index.js"
+    "dev": "NODE_ENV=development node index.js",
+    "deploy": "./scripts/deploy.sh"
   },
   "dependencies": {
     "dotenv": "^8.2.0",

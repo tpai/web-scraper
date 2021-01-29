@@ -1,0 +1,17 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: app-cronjob
+  namespace: web-scraper
+spec:
+  schedule: "30 02 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cronjob
+            image: alpine:latest
+            imagePullPolicy: IfNotPresent
+            command: ["wget", "-O/dev/null", "-q", "app-svc:3000"]
+          restartPolicy: OnFailure

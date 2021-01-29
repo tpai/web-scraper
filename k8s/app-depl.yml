@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-depl
+  namespace: web-scraper
+  labels:
+    app: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: app
+        image: tonypai/web-scraper
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PAGE_URL
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: pageUrl
+        - name: PAGE_SELECTOR
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: pageSelector
+        - name: MAIL_SUBJECT
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: mailSubject
+        - name: MAIL_SENDER_NAME
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: mailSenderName
+        - name: MAIL_HOST
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: mailHost
+        - name: CHROME_HOST
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: chromeHost
+        - name: GMAIL_USER
+          valueFrom: 
+            secretKeyRef:
+              name: app-secrets
+              key: gmailUser
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc
+  namespace: web-scraper
+spec:
+  selector:
+    app: app
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
