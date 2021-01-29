@@ -88,7 +88,8 @@ server.get("/", async (_, res) => {
     const result = await sendEmail(data);
     console.log('Sent');
     res.send(result);
-  } catch (e) {
+  } catch (err) {
+    console.log(err);
     res.sendStatus(400);
   }
 });
