@@ -11,8 +11,8 @@ if ! which envsubst &> /dev/null; then
 fi
 
 # define k8s secrets and configs
-GMAIL_USER_BASE64=$(echo $GMAIL_USER | base64) \
-GMAIL_PASSWORD_BASE64=$(echo $GMAIL_PASSWORD | base64) \
+GMAIL_USER_BASE64="$(echo -n $GMAIL_USER | base64)" \
+GMAIL_PASSWORD_BASE64="$(echo -n $GMAIL_PASSWORD | base64)" \
   envsubst < $REPO/k8s/app-secrets.yml.tmpl > $REPO/k8s/app-secrets.yml
 
 PAGE_URL="\"$PAGE_URL\"" \
