@@ -21,6 +21,8 @@ spec:
         ports:
         - containerPort: 25
         env:
+        - name: RELAY_NETWORKS
+          value: ":10.0.0.0/8:127.0.0.0/8:172.17.0.0/16:192.0.0.0/8"
         - name: GMAIL_USER
           valueFrom: 
             secretKeyRef:
