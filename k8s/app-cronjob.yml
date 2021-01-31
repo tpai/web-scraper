@@ -14,4 +14,4 @@ spec:
             image: alpine:latest
             imagePullPolicy: IfNotPresent
             command: ["wget", "-O/dev/null", "-q", "app-svc:3000"]
-          restartPolicy: OnFailure
+          restartPolicy: Never
