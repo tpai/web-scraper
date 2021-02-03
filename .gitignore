@@ -118,3 +118,4 @@ dist
 # secrets
 k8s/app-configmaps.yml
 k8s/app-secrets.yml
+k8s/app-cronjob.yml

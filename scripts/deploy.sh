@@ -22,6 +22,9 @@ MAIL_SENDER_NAME="\"$MAIL_SENDER_NAME\"" \
 HEALTH_CHECK_URL="\"$HEALTH_CHECK_URL\"" \
   envsubst < $REPO/k8s/app-configmaps.yml.tmpl > $REPO/k8s/app-configmaps.yml
 
+SCHEDULE_TIME="\"$SCHEDULE_TIME\"" \
+  envsubst  < $REPO/k8s/app-cronjob.yml.tmpl > $REPO/k8s/app-cronjob.yml
+
 # create namespace
 kubectl get ns | grep web-scraper
 if [ $? == 1 ]; then
