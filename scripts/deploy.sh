@@ -19,6 +19,7 @@ PAGE_URL="\"$PAGE_URL\"" \
 PAGE_SELECTOR="\"$PAGE_SELECTOR\"" \
 MAIL_SUBJECT="\"$MAIL_SUBJECT\"" \
 MAIL_SENDER_NAME="\"$MAIL_SENDER_NAME\"" \
+HEALTH_CHECK_URL="\"$HEALTH_CHECK_URL\"" \
   envsubst < $REPO/k8s/app-configmaps.yml.tmpl > $REPO/k8s/app-configmaps.yml
 
 # create namespace

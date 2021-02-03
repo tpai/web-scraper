@@ -51,6 +51,11 @@ spec:
             configMapKeyRef:
               name: app-cm
               key: chromeHost
+        - name: HEALTH_CHECK_URL
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: healthCheckUrl
         - name: GMAIL_USER
           valueFrom: 
             secretKeyRef:

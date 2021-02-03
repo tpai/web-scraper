@@ -4,7 +4,13 @@ const dns = require("dns").promises;
 const isReachable = require("is-reachable");
 const puppeteer = require("puppeteer");
 
-const { NODE_ENV, PAGE_URL, PAGE_SELECTOR, CHROME_HOST } = process.env;
+const {
+  NODE_ENV,
+  PAGE_URL,
+  PAGE_SELECTOR,
+  CHROME_HOST,
+  HEALTH_CHECK_URL,
+} = process.env;
 
 const checkAlive = async (url) => {
   const isReached = await isReachable(url);
@@ -30,9 +36,7 @@ const app = async () => {
 
       console.log(`IP_ADDRESS=${address}`);
       console.log("Check browser health...");
-      const isAlive = await checkAlive(
-        `http://${address}:9222`
-      );
+      const isAlive = await checkAlive(`http://${address}:9222`);
       if (!isAlive) {
         console.log("Browser is dead!");
         return;
@@ -84,9 +88,12 @@ const port = 3000;
 server.get("/", async (_, res) => {
   try {
     const data = await app();
-    console.log('Sending email...');
+    console.log("Sending email...");
     const result = await sendEmail(data);
-    console.log('Sent');
+    console.log("Sent");
+    if (HEALTH_CHECK_URL) {
+      await isReachable(HEALTH_CHECK_URL);
+    }
     res.send(result);
   } catch (err) {
     console.log(err);

@@ -4,7 +4,7 @@ metadata:
   name: app-cronjob
   namespace: web-scraper
 spec:
-  schedule: "30 02 * * *"
+  schedule: "30 01 * * *"
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
