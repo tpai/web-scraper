@@ -61,7 +61,7 @@ const app = async () => {
         // fix relative url
         // e.g. href=":id" => href="{hostname}/:id"
         html: element.outerHTML.replace(
-          /href="([^.]*)"/g,
+          /href="([^"]*)"/g,
           (_, p1) => `href="${window.location.href}${p1}"`
         ),
       };
