@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
           - name: cronjob
-            image: alpine:latest
+            image: alpine:3
             imagePullPolicy: IfNotPresent
             command: ["wget", "-O/dev/null", "-q", "app-svc:3000"]
           restartPolicy: Never

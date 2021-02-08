@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: chrome
-        image: alpeware/chrome-headless-trunk:latest
+        image: alpeware/chrome-headless-trunk:rev-851733
         ports:
         - containerPort: 9222
 ---

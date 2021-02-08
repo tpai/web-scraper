@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: tonypai/web-scraper
+        image: tonypai/web-scraper:latest
         ports:
         - containerPort: 3000
         env:
