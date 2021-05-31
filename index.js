@@ -70,6 +70,7 @@ const app = async () => {
     return result;
   } catch (err) {
     console.error(err);
+    throw err;
   }
 };
 
