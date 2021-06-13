@@ -20,6 +20,7 @@ const checkAlive = async (url) => {
   return true;
 };
 
+let page;
 const app = async () => {
   let browser;
   try {
@@ -49,7 +50,7 @@ const app = async () => {
     console.log(await browser.version());
 
     console.log(`Open page: ${PAGE_URL}`);
-    const page = await browser.newPage();
+    page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 720 });
     await page.setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36");
     await page.goto(PAGE_URL);
@@ -67,11 +68,13 @@ const app = async () => {
         ),
       };
     }, PAGE_SELECTOR);
-    await page.close();
     return result;
   } catch (err) {
     console.error(err);
     throw err;
+  } finally {
+    await page.close();
+    console.log('Close page');
   }
 };
 
