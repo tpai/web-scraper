@@ -25,15 +25,19 @@ HEALTH_CHECK_URL="\"$HEALTH_CHECK_URL\"" \
 SCHEDULE_TIME="\"$SCHEDULE_TIME\"" \
   envsubst  < $REPO/k8s/app-cronjob.yml.tmpl > $REPO/k8s/app-cronjob.yml
 
-# build image and push
-docker build -t tonypai/web-scraper .
-docker push tonypai/web-scraper
+if which docker &> /dev/null; then
+  # build image and push
+  docker build -t tonypai/web-scraper .
+  docker push tonypai/web-scraper
 
-# create namespace
-kubectl get ns --kubeconfig ~/.kube/lke.yaml | grep web-scraper
-if [ $? == 1 ]; then
-  kubectl create ns web-scraper --kubeconfig ~/.kube/lke.yaml
+  # create namespace
+  kubectl get ns --kubeconfig ~/.kube/lke.yaml | grep web-scraper
+  if [ $? == 1 ]; then
+    kubectl create ns web-scraper --kubeconfig ~/.kube/lke.yaml
+  fi
+
+  # apply k8s deployment
+  kubectl apply -f $REPO/k8s --kubeconfig ~/.kube/lke.yaml
+else
+  echo "Is the docker daemon running?"
 fi
-
-# apply k8s deployment
-kubectl apply -f $REPO/k8s --kubeconfig ~/.kube/lke.yaml
