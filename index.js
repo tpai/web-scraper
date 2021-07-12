@@ -26,7 +26,10 @@ const app = async () => {
   try {
     console.log("Launch browser");
     if (NODE_ENV === "development") {
-      browser = await puppeteer.launch();
+      browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox']
+      });
     } else {
       console.log(`CHROME_HOST=${CHROME_HOST}`);
 
