@@ -6,6 +6,7 @@ metadata:
   labels:
     app: app
 spec:
+  revisionHistoryLimit: 3
   replicas: 1
   selector:
     matchLabels:
@@ -17,7 +18,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: tonypai/web-scraper:latest
+        image: tonypai/web-scraper:$COMMIT_SHA
         ports:
         - containerPort: 3000
         env:

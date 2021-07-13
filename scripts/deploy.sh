@@ -11,24 +11,25 @@ if ! which envsubst &> /dev/null; then
 fi
 
 # define k8s secrets and configs
-GMAIL_USER_BASE64="$(echo -n $GMAIL_USER | base64)" \
-GMAIL_PASSWORD_BASE64="$(echo -n $GMAIL_PASSWORD | base64)" \
-  envsubst < $REPO/k8s/app-secrets.yml.tmpl > $REPO/k8s/app-secrets.yml
+export COMMIT_SHA=$(git rev-parse --verify HEAD)
+export GMAIL_USER_BASE64="$(echo -n $GMAIL_USER | base64)"
+export GMAIL_PASSWORD_BASE64="$(echo -n $GMAIL_PASSWORD | base64)"
+export PAGE_URL="\"$PAGE_URL\""
+export PAGE_SELECTOR="\"$PAGE_SELECTOR\""
+export MAIL_SUBJECT="\"$MAIL_SUBJECT\""
+export MAIL_SENDER_NAME="\"$MAIL_SENDER_NAME\""
+export HEALTH_CHECK_URL="\"$HEALTH_CHECK_URL\""
+export SCHEDULE_TIME="\"$SCHEDULE_TIME\""
 
-PAGE_URL="\"$PAGE_URL\"" \
-PAGE_SELECTOR="\"$PAGE_SELECTOR\"" \
-MAIL_SUBJECT="\"$MAIL_SUBJECT\"" \
-MAIL_SENDER_NAME="\"$MAIL_SENDER_NAME\"" \
-HEALTH_CHECK_URL="\"$HEALTH_CHECK_URL\"" \
-  envsubst < $REPO/k8s/app-configmaps.yml.tmpl > $REPO/k8s/app-configmaps.yml
-
-SCHEDULE_TIME="\"$SCHEDULE_TIME\"" \
-  envsubst  < $REPO/k8s/app-cronjob.yml.tmpl > $REPO/k8s/app-cronjob.yml
+envsubst < $REPO/k8s/app-secrets.yml.tmpl > $REPO/k8s/app-secrets.yml
+envsubst < $REPO/k8s/app-configmaps.yml.tmpl > $REPO/k8s/app-configmaps.yml
+envsubst < $REPO/k8s/app-cronjob.yml.tmpl > $REPO/k8s/app-cronjob.yml
+envsubst < $REPO/k8s/app-depl.yml.tmpl > $REPO/k8s/app-depl.yml
 
 if which docker &> /dev/null; then
   # build image and push
-  docker build -t tonypai/web-scraper .
-  docker push tonypai/web-scraper
+  docker build -t tonypai/web-scraper:$COMMIT_SHA .
+  docker push tonypai/web-scraper:$COMMIT_SHA
 
   # create namespace
   kubectl get ns --kubeconfig ~/.kube/lke.yaml | grep web-scraper
