@@ -64,11 +64,21 @@ const app = async () => {
       if (!element) return null;
       return {
         text: element.textContent,
-        // fix relative url
-        // e.g. href=":id" => href="{hostname}/:id"
+        // fix link
         html: element.outerHTML.replace(
           /href="([^"]*)"/g,
-          (_, p1) => `href="${window.location.href}${p1}"`
+          (_, p) => {
+            // href="absolute_path" => href="absolute_path"
+            if (/http/ig.test(p)) {
+              return `href="${p}"`;
+            }
+            // href="relative_path"
+            // case 1: https://{host}/{path1}/{path2}/ => https://{host}/{path1}/{path2}/{p}
+            // case 2: https://{host}/{path1}/{path2} => https://{host}/{path1}/{p}
+            const endWithSlash = /\/$/.test(p);
+            const url = endWithSlash ? `${window.location.href}${p}` : `${window.location.href}/../${p}`;
+            return `href="${url}"`;
+          }
         ),
       };
     }, PAGE_SELECTOR);
