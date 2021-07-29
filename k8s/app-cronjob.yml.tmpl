@@ -14,5 +14,6 @@ spec:
           - name: cronjob
             image: alpine:3
             imagePullPolicy: IfNotPresent
-            command: ["wget", "-O", "/dev/null", "-S", "app-svc:3000", "||", "true"]
+            command: ["/bin/sh"]
+            args: ["-c", "apk update && apk --no-cache add openssl wget && wget -O /dev/null -S app-svc:3000"]
           restartPolicy: Never
