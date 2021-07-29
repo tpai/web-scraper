@@ -98,12 +98,13 @@ server.get("/", async (_, res) => {
   try {
     const data = await app();
     console.log("Sending email...");
-    const result = await sendEmail(data);
+    const { header } = await sendEmail(data);
+    console.log(header);
     console.log("Sent");
     if (HEALTH_CHECK_URL) {
       await isReachable(HEALTH_CHECK_URL);
     }
-    res.send(result);
+    res.sendStatus(200);
   } catch (err) {
     console.log(err);
     res.sendStatus(400);
