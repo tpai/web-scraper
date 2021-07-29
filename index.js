@@ -84,8 +84,7 @@ const app = async () => {
     }, PAGE_SELECTOR);
     return result;
   } catch (err) {
-    console.error(err);
-    throw err;
+    throw new Error(err);
   } finally {
     await page.close();
     console.log('Close page');
@@ -94,8 +93,12 @@ const app = async () => {
 
 if (NODE_ENV === "development") {
   (async function () {
-    const data = await app();
-    console.log(data);
+    try {
+      const data = await app();
+      console.log(data);
+    } catch(err) {
+      console.log(err);
+    }
   })();
 }
 
