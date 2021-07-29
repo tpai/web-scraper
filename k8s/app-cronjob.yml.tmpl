@@ -14,5 +14,5 @@ spec:
           - name: cronjob
             image: alpine:3
             imagePullPolicy: IfNotPresent
-            command: ["wget", "-O/dev/null", "-q", "app-svc:3000"]
+            command: ["wget", "-O", "/dev/null", "-S", "app-svc:3000", "||", "true"]
           restartPolicy: Never
