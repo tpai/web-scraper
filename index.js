@@ -110,17 +110,19 @@ const port = 3000;
 server.get("/", async (_, res) => {
   try {
     const data = await app();
+    if (!data.text || !data.html) {
+      throw new Error(data);
+    }
     console.log("Sending email...");
-    const { header } = await sendEmail(data);
-    console.log(header);
+    const result = await sendEmail(data);
     console.log("Sent");
     if (HEALTH_CHECK_URL) {
       await isReachable(HEALTH_CHECK_URL);
     }
-    res.sendStatus(200);
+    res.status(200).send(JSON.stringify(result));
   } catch (err) {
     console.log(err);
-    res.sendStatus(400);
+    res.status(400).send(`${err}`);
   }
 });
 
