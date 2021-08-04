@@ -8,6 +8,7 @@ spec:
   successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      backoffLimit: 0
       template:
         spec:
           containers:
@@ -15,5 +16,5 @@ spec:
             image: alpine:3
             imagePullPolicy: IfNotPresent
             command: ["/bin/sh"]
-            args: ["-c", "apk update && apk --no-cache add openssl wget && wget -O /dev/null -S app-svc:3000"]
+            args: ["-c", "apk update && apk --no-cache add openssl wget && wget --tries=1 --timeout=600 -S -O- app-svc:3000"]
           restartPolicy: Never
