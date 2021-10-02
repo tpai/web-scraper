@@ -28,7 +28,7 @@ const app = async () => {
     if (NODE_ENV === "development") {
       browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox']
+        args: ["--no-sandbox"],
       });
     } else {
       console.log(`CHROME_HOST=${CHROME_HOST}`);
@@ -54,9 +54,11 @@ const app = async () => {
 
     console.log(`Open page: ${PAGE_URL}`);
     page = await browser.newPage();
-    page.setDefaultNavigationTimeout(0); 
+    page.setDefaultNavigationTimeout(0);
     await page.setViewport({ width: 1280, height: 720 });
-    await page.setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36");
+    await page.setUserAgent(
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36"
+    );
     await page.goto(PAGE_URL);
 
     const result = await page.evaluate((selector) => {
@@ -65,21 +67,23 @@ const app = async () => {
       return {
         text: element.textContent,
         // fix link
-        html: element.outerHTML.replace(
-          /href="([^"]*)"/g,
-          (_, p) => {
+        html: element.outerHTML
+          .replace(/href="([^"]*)"/g, (_, p) => {
             // href="absolute_path" => href="absolute_path"
-            if (/http/ig.test(p)) {
+            if (/http/gi.test(p)) {
               return `href="${p}"`;
             }
             // href="relative_path"
             // case 1: https://{host}/{path1}/{path2}/ => https://{host}/{path1}/{path2}/{p}
             // case 2: https://{host}/{path1}/{path2} => https://{host}/{path1}/{p}
             const endWithSlash = /\/$/.test(p);
-            const url = endWithSlash ? `${window.location.href}${p}` : `${window.location.href}/../${p}`;
+            const url = endWithSlash
+              ? `${window.location.href}${p}`
+              : `${window.location.href}/../${p}`;
             return `href="${url}"`;
-          }
-        ),
+          })
+          // strip attributes
+          .replace(/ \S*=\"\w*\"/gm, ""),
       };
     }, PAGE_SELECTOR);
     return result;
@@ -87,7 +91,7 @@ const app = async () => {
     throw new Error(err);
   } finally {
     await page.close();
-    console.log('Close page');
+    console.log("Close page");
   }
 };
 
