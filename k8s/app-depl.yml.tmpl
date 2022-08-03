@@ -57,6 +57,11 @@ spec:
             configMapKeyRef:
               name: app-cm
               key: mailSubject
+        - name: MAIL_SENDER
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: mailSender
         - name: MAIL_SENDER_NAME
           valueFrom: 
             configMapKeyRef:
