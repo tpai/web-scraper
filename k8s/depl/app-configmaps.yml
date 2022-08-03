@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-cm
+  namespace: web-scraper
+data:
+  pageUrl: "https://disp.cc/b/"
+  pageSelector: "#ht_content"
+  chromeHost: chrome-svc
+  smtpHost: "email-smtp.us-east-1.amazonaws.com"
+  mailSubject: "每日熱門文章"
+  mailSender: "tony77794@gmail.com"
+  mailSenderName: "Tony Pai"
+  healthCheckUrl: "https://hc-ping.com/fe1665bc-67a9-4806-88b1-9f8ca59fad56"

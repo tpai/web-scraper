@@ -1,11 +1,10 @@
 name: Validate K8S files
 on: push
 jobs:
-  build:
+  container:
     runs-on: ubuntu-latest
+    container: deck15/kubeval-tools:latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
       - run: |
-          curl -OL https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz &&
-          tar xf kubeval-linux-amd64.tar.gz &&
-          ./kubeval k8s/*
+          kubeconform -summary k8s/*.yml

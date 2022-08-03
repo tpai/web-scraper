@@ -23,10 +23,10 @@ export MAIL_SENDER="\"$MAIL_SENDER\""
 export MAIL_SENDER_NAME="\"$MAIL_SENDER_NAME\""
 export HEALTH_CHECK_URL="\"$HEALTH_CHECK_URL\""
 
-envsubst < $REPO/k8s/app-secrets.yml.tmpl > $REPO/k8s/app-secrets.yml
-envsubst < $REPO/k8s/app-configmaps.yml.tmpl > $REPO/k8s/app-configmaps.yml
-envsubst < $REPO/k8s/app-cronjob.yml.tmpl > $REPO/k8s/app-cronjob.yml
-envsubst < $REPO/k8s/app-depl.yml.tmpl > $REPO/k8s/app-depl.yml
+envsubst < $REPO/k8s/app-secrets.tmpl.yml > $REPO/k8s/depl/app-secrets.yml
+envsubst < $REPO/k8s/app-configmaps.tmpl.yml > $REPO/k8s/depl/app-configmaps.yml
+envsubst < $REPO/k8s/app-cronjob.tmpl.yml > $REPO/k8s/depl/app-cronjob.yml
+envsubst < $REPO/k8s/app-depl.tmpl.yml > $REPO/k8s/depl/app-depl.yml
 
 if which docker &> /dev/null; then
   # build image and push
@@ -40,7 +40,7 @@ if which docker &> /dev/null; then
   fi
 
   # apply k8s deployment
-  kubectl apply -f $REPO/k8s --kubeconfig ~/.kube/lke.yaml
+  kubectl apply -f $REPO/k8s/depl --kubeconfig ~/.kube/lke.yaml
 else
   echo "Is the docker daemon running?"
 fi

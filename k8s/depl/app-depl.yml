@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-depl
+  namespace: web-scraper
+  labels:
+    app: app
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: app
+        image: "tonypai/web-scraper:6aa7dd590d51bbaef2ab070e579faab05f42140b"
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PAGE_URL
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: pageUrl
+        - name: PAGE_SELECTOR
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: pageSelector
+        - name: CHROME_HOST
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: chromeHost
+        - name: SMTP_HOST
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: smtpHost
+        - name: SMTP_USERNAME
+          valueFrom: 
+            secretKeyRef:
+              name: app-secrets
+              key: smtpUsername
+        - name: SMTP_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: app-secrets
+              key: smtpPassword
+        - name: MAIL_SUBJECT
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: mailSubject
+        - name: MAIL_SENDER
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: mailSender
+        - name: MAIL_SENDER_NAME
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: mailSenderName
+        - name: HEALTH_CHECK_URL
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: healthCheckUrl
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc
+  namespace: web-scraper
+spec:
+  selector:
+    app: app
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
