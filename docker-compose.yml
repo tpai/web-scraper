@@ -16,7 +16,6 @@ services:
       - .env
     depends_on:
       - chrome
-      - email
   chrome:
     image: alpeware/chrome-headless-trunk:latest
     network_mode: service:net
@@ -31,11 +30,5 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command: daemon --docker
     labels:
-      ofelia.job-local.my-job.schedule: "@every 1d"
+      ofelia.job-local.my-job.schedule: "@daily"
       ofelia.job-local.my-job.command: "wget -O/dev/null -q 0.0.0.0:3000"
-  email:
-    image: namshi/smtp:latest
-    network_mode: service:net
-    restart: always
-    env_file:
-      - .env

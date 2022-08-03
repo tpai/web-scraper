@@ -3,19 +3,24 @@ require("dotenv").config();
 const { SMTPClient } = require("emailjs");
 
 const {
-  MAIL_HOST,
+  SMTP_HOST,
+  SMTP_USERNAME,
+  SMTP_PASSWORD,
   MAIL_SUBJECT,
+  MAIL_SENDER,
   MAIL_SENDER_NAME,
-  GMAIL_USER,
 } = process.env;
 
 const sendEmail = ({ text, html }) => {
   const client = new SMTPClient({
-    host: MAIL_HOST || '0.0.0.0',
+    host: SMTP_HOST || '0.0.0.0',
+    user: SMTP_USERNAME,
+    password: SMTP_PASSWORD,
+    ssl: true,
   });
   const message = {
-    from: `${MAIL_SENDER_NAME} <${GMAIL_USER}>`,
-    to: `${MAIL_SENDER_NAME} <${GMAIL_USER}>`,
+    from: `${MAIL_SENDER_NAME} <${MAIL_SENDER}>`,
+    to: `${MAIL_SENDER_NAME} <${MAIL_SENDER}>`,
     subject: MAIL_SUBJECT,
     text,
     attachment: [{ data: html, alternative: true }],

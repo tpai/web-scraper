@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: tonypai/web-scraper:$COMMIT_SHA
+        image: "tonypai/web-scraper:$COMMIT_SHA"
         ports:
         - containerPort: 3000
         env:
@@ -32,6 +32,26 @@ spec:
             configMapKeyRef:
               name: app-cm
               key: pageSelector
+        - name: CHROME_HOST
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: chromeHost
+        - name: SMTP_HOST
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: smtpHost
+        - name: SMTP_USERNAME
+          valueFrom: 
+            secretKeyRef:
+              name: app-secrets
+              key: smtpUsername
+        - name: SMTP_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: app-secrets
+              key: smtpPassword
         - name: MAIL_SUBJECT
           valueFrom: 
             configMapKeyRef:
@@ -42,26 +62,11 @@ spec:
             configMapKeyRef:
               name: app-cm
               key: mailSenderName
-        - name: MAIL_HOST
-          valueFrom: 
-            configMapKeyRef:
-              name: app-cm
-              key: mailHost
-        - name: CHROME_HOST
-          valueFrom: 
-            configMapKeyRef:
-              name: app-cm
-              key: chromeHost
         - name: HEALTH_CHECK_URL
           valueFrom: 
             configMapKeyRef:
               name: app-cm
               key: healthCheckUrl
-        - name: GMAIL_USER
-          valueFrom: 
-            secretKeyRef:
-              name: app-secrets
-              key: gmailUser
 ---
 apiVersion: v1
 kind: Service
