@@ -69,18 +69,16 @@ const app = async () => {
         // fix link
         html: element.outerHTML
           .replace(/href="([^"]*)"/g, (_, p) => {
-            // href="absolute_path" => href="absolute_path"
-            if (/http/gi.test(p)) {
+            // href="https://{host}/foo"
+            if (/^https?/gi.test(p)) {
               return `href="${p}"`;
             }
-            // href="relative_path"
-            // case 1: https://{host}/{path1}/{path2}/ => https://{host}/{path1}/{path2}/{p}
-            // case 2: https://{host}/{path1}/{path2} => https://{host}/{path1}/{p}
-            const endWithSlash = /\/$/.test(p);
-            const url = endWithSlash
-              ? `${window.location.href}${p}`
-              : `${window.location.href}/../${p}`;
-            return `href="${url}"`;
+            // href="/foo"
+            if (/^\//gi.test(p)) {
+              return `href="https://${window.location.host}${p}"`;
+            }
+            // href="./foo"
+            return `href="https://${window.location.host}/${p}"`;
           })
           // strip attributes
           .replace(/ \S*=\"\w*\"/gm, ""),
