@@ -1,5 +1,3 @@
-version: '3.5'
-
 services:
   net:
     image: alpine:3.7
@@ -17,10 +15,12 @@ services:
     depends_on:
       - chrome
   chrome:
-    image: alpeware/chrome-headless-trunk:latest
+    image: justinribeiro/chrome-headless
     network_mode: service:net
     volumes:
       - /tmp/chromedata/:/data
+    cap_add:
+      - SYS_ADMIN
   cronjob:
     image: mcuadros/ofelia:latest
     network_mode: service:net
