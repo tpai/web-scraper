@@ -9,6 +9,8 @@ const {
   MAIL_SUBJECT,
   MAIL_SENDER,
   MAIL_SENDER_NAME,
+  MAIL_RECEIVER,
+  MAIL_RECEIVER_NAME,
 } = process.env;
 
 const sendEmail = ({ text, html }) => {
@@ -20,7 +22,7 @@ const sendEmail = ({ text, html }) => {
   });
   const message = {
     from: `${MAIL_SENDER_NAME} <${MAIL_SENDER}>`,
-    to: `${MAIL_SENDER_NAME} <${MAIL_SENDER}>`,
+    to: MAIL_RECEIVER ? `${MAIL_RECEIVER_NAME} <${MAIL_RECEIVER}>` : `${MAIL_SENDER_NAME} <${MAIL_SENDER}>`,
     subject: MAIL_SUBJECT,
     text,
     attachment: [{ data: html, alternative: true }],

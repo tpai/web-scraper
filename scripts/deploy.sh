@@ -21,6 +21,8 @@ export SMTP_PASSWORD="$(echo -n $SMTP_PASSWORD | base64)"
 export MAIL_SUBJECT="\"$MAIL_SUBJECT\""
 export MAIL_SENDER="\"$MAIL_SENDER\""
 export MAIL_SENDER_NAME="\"$MAIL_SENDER_NAME\""
+export MAIL_RECEIVER="\"$MAIL_RECEIVER\""
+export MAIL_RECEIVER_NAME="\"$MAIL_RECEIVER_NAME\""
 export HEALTH_CHECK_URL="\"$HEALTH_CHECK_URL\""
 
 envsubst < $REPO/k8s/app-secrets.tmpl.yml > $REPO/k8s/depl/app-secrets.yml
