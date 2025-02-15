@@ -1,6 +1,6 @@
 {
   "name": "web-scraper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "author": "Tony Pai <tony77794@gmail.com>",
   "license": "MIT",
