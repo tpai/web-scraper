@@ -1,5 +1,5 @@
-FROM node:18-alpine
-
+FROM node:20 AS build-env
+COPY . /app
 WORKDIR /app
 
 COPY package.json .
@@ -11,8 +11,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 # Install dependencies
 RUN yarn install --frozen-lockfile --production
 
-# Add required assets
-COPY index.js .
-COPY utils ./utils
-
-CMD ["node", "index.js"]
+FROM gcr.io/distroless/nodejs20-debian12
+COPY --from=build-env /app /app
+WORKDIR /app
+CMD ["index.js"]
