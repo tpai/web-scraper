@@ -11,4 +11,6 @@ data:
   mailSubject: $MAIL_SUBJECT
   mailSender: $MAIL_SENDER
   mailSenderName: $MAIL_SENDER_NAME
+  mailReciver: $MAIL_RECIVER
+  mailReciverName: $MAIL_RECIVER_NAME
   healthCheckUrl: $HEALTH_CHECK_URL

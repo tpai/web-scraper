@@ -67,6 +67,16 @@ spec:
             configMapKeyRef:
               name: app-cm
               key: mailSenderName
+        - name: MAIL_RECIVER
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: mailReciver
+        - name: MAIL_RECIVER_NAME
+          valueFrom: 
+            configMapKeyRef:
+              name: app-cm
+              key: mailReciverName
         - name: HEALTH_CHECK_URL
           valueFrom: 
             configMapKeyRef:
